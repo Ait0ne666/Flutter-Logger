@@ -15,11 +15,14 @@ class Logger {
   static Logger? _instance;
   final LoggerConfig config;
 
-  Logger(this.config) {
+  Logger._(this.config) {
+    print("created");
     _instance = Logger(config);
   }
 
-  static Logger? get instance => _instance;
+
+  factory Logger(LoggerConfig config) => _instance ??= Logger._(config);
+
 
   void log(LogLevels level, String message) async {
     var uri = Uri.parse(config.API_URL + '/logger');
