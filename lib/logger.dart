@@ -1,6 +1,9 @@
 library ait0ne_logger;
 
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
+import 'package:device_info_plus/device_info_plus.dart';
 
 class LoggerConfig {
   final String API_KEY;
@@ -17,21 +20,40 @@ class Logger {
 
   Logger._(this.config);
 
-
   factory Logger(LoggerConfig config) => _instance ??= Logger._(config);
-
 
   void log(LogLevels level, String message) async {
     var uri = Uri.parse(config.API_URL + '/logger');
 
     try {
+      var device = DeviceInfoPlugin();
+      var mes = message;
+      if (Platform.isAndroid) {
+        var info = await device.androidInfo;
+
+        mes = "Device: " +
+            (info.device ?? "") +
+            "\n Model: " +
+            (info.model ?? "") +
+            "\n" +
+            mes;
+      } else if (Platform.isIOS) {
+        var info = await device.iosInfo;
+
+        mes = "Device: " +
+            (info.utsname.machine ?? "") +
+            "\n Model: " +
+            (info.model ?? "") +
+            "\n" +
+            mes;
+      }
+      var lvl = mapLevelToString(level);
+
       var response = await http.post(uri,
           headers: {"Authorization": "Bearer " + config.API_KEY},
-          body: {level: mapLevelToString(level), message: message});
-
-      print(response.body);
+          body: {"level": lvl, "message": mes});
     } catch (err) {
-      print(err.toString());
+      print("resp:" + err.toString());
     }
   }
 
