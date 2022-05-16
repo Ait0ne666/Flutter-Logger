@@ -15,10 +15,7 @@ class Logger {
   static Logger? _instance;
   final LoggerConfig config;
 
-  Logger._(this.config) {
-    print("created");
-    _instance = Logger(config);
-  }
+  Logger._(this.config);
 
 
   factory Logger(LoggerConfig config) => _instance ??= Logger._(config);
