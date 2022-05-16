@@ -33,9 +33,9 @@ class Logger {
 
         mes = "Device: " +
             (info.device ?? "") +
-            "\n Model: " +
+            "\nModel: " +
             (info.model ?? "") +
-            "\n" +
+            "\nMesage: " +
             mes;
       } else if (Platform.isIOS) {
         var info = await device.iosInfo;
