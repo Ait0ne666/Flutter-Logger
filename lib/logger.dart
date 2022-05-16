@@ -1,4 +1,4 @@
-library logger;
+library ait0ne_logger;
 
 import 'package:http/http.dart' as http;
 
